@@ -1,0 +1,20 @@
+name: AliienItemBlacklist
+version: '1.0.0'
+main: com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist
+api-version: '1.21'
+
+commands:
+  itemblacklist:
+    description: Main command for AliienItemBlacklist
+    usage: /<command>
+
+permissions:
+  aliien.itemblacklist.bypass:
+    description: Allows a player to pick up and interact with blacklisted items.
+    default: op
+  aliien.itemblacklist.reload:
+    description: Allows a player to reload the config.
+    default: op
+  aliien.itemblacklist.alert:
+    description: Receives a notification when someone handles a blacklisted item.
+    default: op
