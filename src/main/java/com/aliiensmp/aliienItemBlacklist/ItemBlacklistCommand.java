@@ -24,12 +24,14 @@ public class ItemBlacklistCommand implements CommandExecutor, TabCompleter {
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("aliien.itemblacklist.reload")) {
-                sender.sendMessage(mm.deserialize("<red>You do not have permission to perform this command!"));
+                String noPermMsg = plugin.getConfig().getString("no-permission", "<red>You do not have permission to perform this command!");
+                sender.sendMessage(mm.deserialize(noPermMsg));
                 return true;
             }
             plugin.reloadConfig();
 
-            sender.sendMessage(mm.deserialize("<green>AliienItemBlacklist reloaded successfully!"));
+            String reloadMsg = plugin.getConfig().getString("reload", "<green>AliienItemBlacklist reloaded successfully!");
+            sender.sendMessage(mm.deserialize(reloadMsg));
             return true;
         }
         return true;
