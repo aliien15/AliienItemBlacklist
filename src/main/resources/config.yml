@@ -1,13 +1,4 @@
-# Quick temp documentation on perms for now:
-#
-# aliien.itemblacklist.reload -> sets permission to reload the plugin (default: op)
-# aliien.itemblacklist.bypass -> sets permission to bypass this plugin's restrictions (therefore lets you
-# have the blacklisted items) (default: op)
-# aliien.itemblacklist.alert -> sends an alert to whoever has this permission if someone has
-# a blacklisted item (default: op)
-#
-# That's all, have fun!
-
+# List of blacklisted items (make sure they are in caps)
 blacklisted-items:
   - BEDROCK
   - BARRIER
