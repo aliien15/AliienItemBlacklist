@@ -22,7 +22,7 @@ public class UpdateNotifyListener implements Listener {
         Player player = event.getPlayer();
 
         // Only notify players with the admin permission
-        if (player.hasPermission("aliien.chatcolor.admin")) {
+        if (player.hasPermission("aliien.itemblacklist.version-notify")) {
             new UpdateChecker(plugin, gistUrl).getVersion(version -> {
                 // Check if the server's version matches the Gist's version
                 if (!plugin.getPluginMeta().getVersion().equals(version)) {

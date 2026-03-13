@@ -18,3 +18,6 @@ permissions:
   aliien.itemblacklist.alert:
     description: Receives a notification when someone handles a blacklisted item.
     default: op
+  aliien.itemblacklist.version-notify:
+    description: Receives a notification when there is a new plugin update.
+    default: op
