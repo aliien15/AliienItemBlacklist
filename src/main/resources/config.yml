@@ -8,3 +8,4 @@ blacklisted-items:
 no-permission: "<red>You do not have permission to perform this command!"
 reload: "<green>AliienItemBlacklist has been reloaded successfully!"
 alert: "<red><bold>THE PLAYER %player% HAD A BLACKLISTED ITEM!"
+new-version: "<green>A new AliienItemBlacklist version is now available!"
