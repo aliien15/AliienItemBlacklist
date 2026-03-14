@@ -1,5 +1,6 @@
-package com.aliiensmp.aliienItemBlacklist;
+package com.aliiensmp.aliienItemBlacklist.utils;
 
+import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import org.bukkit.Bukkit;
 
 import java.io.IOException;

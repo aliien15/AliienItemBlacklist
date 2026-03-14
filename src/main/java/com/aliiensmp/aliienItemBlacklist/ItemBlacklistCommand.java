@@ -1,5 +1,6 @@
 package com.aliiensmp.aliienItemBlacklist;
 
+import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,10 +13,12 @@ import java.util.List;
 
 public class ItemBlacklistCommand implements CommandExecutor, TabCompleter {
     private final AliienItemBlacklist plugin;
+    private final ItemsCache cache;
     private final MiniMessage mm = MiniMessage.miniMessage();
 
-    public ItemBlacklistCommand(AliienItemBlacklist plugin) {
+    public ItemBlacklistCommand(AliienItemBlacklist plugin, ItemsCache cache) {
         this.plugin = plugin;
+        this.cache = cache;
     }
 
     @Override
@@ -24,14 +27,15 @@ public class ItemBlacklistCommand implements CommandExecutor, TabCompleter {
 
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("aliien.itemblacklist.reload")) {
-                String noPermMsg = plugin.getConfig().getString("no-permission", "<red>You do not have permission to perform this command!");
-                sender.sendMessage(mm.deserialize(noPermMsg));
+                sender.sendMessage(mm.deserialize(cache.getNoPermMsg()));
                 return true;
             }
-            plugin.reloadConfig();
 
-            String reloadMsg = plugin.getConfig().getString("reload", "<green>AliienItemBlacklist reloaded successfully!");
-            sender.sendMessage(mm.deserialize(reloadMsg));
+            // Reload the config, THEN reload the cache!
+            plugin.reloadConfig();
+            cache.loadCache();
+
+            sender.sendMessage(mm.deserialize(cache.getReloadMsg()));
             return true;
         }
         return true;
@@ -39,13 +43,10 @@ public class ItemBlacklistCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-
         if (args.length == 1) {
-            // Auto tab before typing anything
             List<String> subcommands = List.of("reload");
             List<String> completions = new ArrayList<>();
 
-            // Filter based on what they already typed
             for (String sub : subcommands) {
                 if (sub.startsWith(args[0].toLowerCase())) {
                     completions.add(sub);
@@ -53,8 +54,6 @@ public class ItemBlacklistCommand implements CommandExecutor, TabCompleter {
             }
             return completions;
         }
-
-        // Empty list so it doesn't suggest anything else other than the essential
         return List.of();
     }
 }

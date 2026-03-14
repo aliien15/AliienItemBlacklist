@@ -3,6 +3,16 @@ blacklisted-items:
   - BEDROCK
   - BARRIER
 
+############################################## Settings ########################################################
+
+settings:
+  # Should players with the aliien.itemblacklist.alert permission receive an alert when a player
+  # tries to interact with a blacklisted item?
+  show-alerts: true
+  # If true, NO ONE can use blacklisted items, not even OPs or players with the bypass permission.
+  # Highly recommended if there is an exploit currently going around.
+  strict-mode: false
+
 ############################################## Messages ########################################################
 
 no-permission: "<red>You do not have permission to perform this command!"
