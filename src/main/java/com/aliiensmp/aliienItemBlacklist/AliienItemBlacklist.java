@@ -18,7 +18,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
         cache = new ItemsCache(this);
         cache.loadCache();
 
-        String gistUrl = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/f1dbf6d22d568b4d0fb24c0a779c786788418fc6/AliienItemBlacklist-version.txt";
+        String gistUrl = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/AliienItemBlacklist-version.txt";
         updateChecker(gistUrl);
 
         getServer().getPluginManager().registerEvents(new ItemBlacklistListener(cache), this);
