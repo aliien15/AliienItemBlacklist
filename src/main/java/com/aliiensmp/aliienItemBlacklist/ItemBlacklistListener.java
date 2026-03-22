@@ -3,6 +3,7 @@ package com.aliiensmp.aliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +12,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemBlacklistListener implements Listener {
@@ -26,33 +28,31 @@ public class ItemBlacklistListener implements Listener {
         return cache.isBlacklisted(item.getType());
     }
 
-    private void sendAlert(Player player) {
+    private void sendAlert(Player player, Material mat) {
         if (!cache.isShowAlerts()) return;
 
-        String alertMsg = cache.getAlertMsg();
-        if (alertMsg == null || alertMsg.isEmpty()) return;
-
-        String finalMsg = alertMsg.replace("%player%", player.getName());
+        String alertMsg = cache.getAlertMsg().replace("%player%", player.getName()).replace("%item%", mat.name());
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.hasPermission("aliien.itemblacklist.alert")) {
-                onlinePlayer.sendMessage(mm.deserialize(finalMsg));
+                onlinePlayer.sendMessage(mm.deserialize(alertMsg));
             }
         }
 
-        Bukkit.getConsoleSender().sendMessage(mm.deserialize(finalMsg));
+        Bukkit.getConsoleSender().sendMessage(mm.deserialize(alertMsg));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerPickup(EntityPickupItemEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
 
         if (!cache.isStrictMode() && player.hasPermission("aliien.itemblacklist.bypass")) return;
 
         if (isBlacklisted(event.getItem().getItemStack())) {
+            Material savedBadMat = event.getItem().getItemStack().getType(); // Save before removing
             event.setCancelled(true);
             event.getItem().remove();
-            sendAlert(player);
+            sendAlert(player, savedBadMat);
         }
     }
 
@@ -62,10 +62,20 @@ public class ItemBlacklistListener implements Listener {
 
         if (!cache.isStrictMode() && player.hasPermission("aliien.itemblacklist.bypass")) return;
 
+        // Item clicking on
         if (isBlacklisted(event.getCurrentItem())) {
+            Material savedBadMat = event.getCurrentItem().getType();
             event.setCancelled(true);
             event.getCurrentItem().setAmount(0);
-            sendAlert(player);
+            sendAlert(player, savedBadMat);
+        }
+
+        // Item dragged on the cursos
+        if (isBlacklisted(event.getCursor())) {
+            Material savedBadMat = event.getCursor().getType();
+            event.setCancelled(true);
+            player.setItemOnCursor(null);
+            sendAlert(player, savedBadMat);
         }
     }
 
@@ -76,9 +86,10 @@ public class ItemBlacklistListener implements Listener {
         if (!cache.isStrictMode() && player.hasPermission("aliien.itemblacklist.bypass")) return;
 
         if (isBlacklisted(event.getOldCursor())) {
+            Material savedBadMat = event.getOldCursor().getType(); // Save before modifying
             event.setCancelled(true);
             event.setCursor(null);
-            sendAlert(player);
+            sendAlert(player, savedBadMat);
         }
     }
 
@@ -89,8 +100,24 @@ public class ItemBlacklistListener implements Listener {
         if (!cache.isStrictMode() && player.hasPermission("aliien.itemblacklist.bypass")) return;
 
         if (isBlacklisted(event.getCurrentItem())) {
+            Material savedBadMat = event.getCurrentItem().getType();
             event.setCancelled(true);
-            sendAlert(player);
+            sendAlert(player, savedBadMat);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+
+        if (!cache.isStrictMode() && player.hasPermission("aliien.itemblacklist.bypass")) return;
+
+        ItemStack droppedItem = event.getItemDrop().getItemStack();
+        if (isBlacklisted(droppedItem)) {
+            Material savedBadMat = droppedItem.getType();
+            event.getItemDrop().remove();
+
+            sendAlert(player, savedBadMat);
         }
     }
 }
