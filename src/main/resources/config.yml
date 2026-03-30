@@ -12,6 +12,12 @@ settings:
   # If true, NO ONE can use blacklisted items, not even OPs or players with the bypass permission.
   # Highly recommended if there is an exploit currently going around.
   strict-mode: false
+  # If true, it will create/update the logs.txt file every time a player tries to interact with a
+  # blacklisted item in any way (changing this requires a reboot)
+  enable-logging: true
+  # If true, players with the aliien.itemblacklist.version-notify permissions will be
+  # notified every time there is a new plugin update (changing this requires a reboot)
+  check-for-updates: true
 
 ############################################## Messages ########################################################
 

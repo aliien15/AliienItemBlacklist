@@ -14,6 +14,8 @@ public class ItemsCache {
 
     private boolean showAlerts;
     private boolean strictMode;
+    private boolean enableLogging;
+
     private String alertMsg;
     private String noPermMsg;
     private String reloadMsg;
@@ -34,6 +36,7 @@ public class ItemsCache {
         // Load Settings
         showAlerts = plugin.getConfig().getBoolean("settings.show-alerts", true);
         strictMode = plugin.getConfig().getBoolean("settings.strict-mode", false);
+        enableLogging = plugin.getConfig().getBoolean("settings.enable-logging", true);
 
         // Cache the materials
         List<String> items = plugin.getConfig().getStringList("blacklisted-items");
@@ -101,6 +104,8 @@ public class ItemsCache {
 
     public boolean isShowAlerts() { return showAlerts; }
     public boolean isStrictMode() { return strictMode; }
+    public boolean isEnableLogging() { return enableLogging; }
+
     public String getAlertMsg() { return alertMsg; }
     public String getNoPermMsg() { return noPermMsg; }
     public String getReloadMsg() { return reloadMsg; }
