@@ -1,0 +1,35 @@
+# =======================================================
+# AliienItemBlacklist - Settings
+# =======================================================
+# Should players with the aliien.itemblacklist.alert permission receive an alert when a player
+# tries to interact with a blacklisted item?
+show-alerts: true
+# If true, NO ONE can use blacklisted items, not even OPs or players with the bypass permission.
+# Highly recommended if there is an exploit currently going around.
+strict-mode: false
+# If true, it will create/update the logs.txt file every time a player tries to interact with a
+# blacklisted item in any way (changing this requires a reboot)
+enable-logging: true
+# If true, players with the aliien.itemblacklist.version-notify permissions will be
+# notified every time there is a new plugin update (changing this requires a reboot)
+check-for-updates: true
+
+# Sound Configuration
+# Format: SOUND_NAME:VOLUME:PITCH
+# You can use standard Bukkit sounds (e.g., UI_BUTTON_CLICK)
+# or custom Resource Pack sounds (e.g., aliien.ui.click).
+# Set to "none" to disable a specific sound.
+sounds:
+  enabled: true # If this is set to false, you can ignore the rest
+  click: "UI_BUTTON_CLICK:0.5:1.0"
+  success: "ENTITY_PLAYER_LEVELUP:0.5:2.0"
+  error: "ENTITY_VILLAGER_NO:0.8:1.0"
+  alert: "BLOCK_ANVIL_LAND:0.8:1.0"
+
+# A list of worlds where the item blacklist is completely ignored.
+# Players can use any blacklisted items in these worlds.
+disabled-worlds:
+  - "example_world"
+
+# DO NOT under any circumstance touch this unless you are told to by the official support
+config-version: 1
