@@ -1,5 +1,6 @@
-package com.aliiensmp.aliienItemBlacklist;
+package com.aliiensmp.aliienItemBlacklist.listeners;
 
+import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.utils.MessageUtils;
 import org.bukkit.Bukkit;
