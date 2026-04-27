@@ -4,7 +4,7 @@
   <groupId>com.aliiensmp</groupId>
   <artifactId>AliienItemBlacklist</artifactId>
   <name>aliienitemblacklist</name>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -47,7 +47,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.aliiensmp.core</pattern>
-                  <shadedPattern>com.aliiensmp.itemblacklist.core</shadedPattern>
+                  <shadedPattern>com.aliiensmp.aliienItemBlacklist.core</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>com.aliiensmp.aliienItemBlacklist.bstats</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

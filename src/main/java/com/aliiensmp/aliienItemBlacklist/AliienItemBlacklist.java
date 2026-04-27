@@ -5,12 +5,12 @@ import com.aliiensmp.aliienItemBlacklist.commands.Commands;
 import com.aliiensmp.aliienItemBlacklist.listeners.ItemBlacklistListener;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.AliienCore;
-import com.aliiensmp.core.bstats.bukkit.Metrics;
-import com.aliiensmp.core.bstats.charts.SimplePie;
 import com.aliiensmp.core.config.ConfigManager;
 import com.aliiensmp.core.utils.ColorUtils;
 import com.aliiensmp.core.utils.updatechecker.UpdateChecker;
 import dev.dejvokep.boostedyaml.YamlDocument;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
 import revxrsal.zapper.DependencyManager;
 import revxrsal.zapper.classloader.URLClassLoaderWrapper;
@@ -81,7 +81,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
     }
 
     private void setupBStats() {
-        Metrics metrics = AliienCore.enableMetrics(this, 30662);
+        Metrics metrics = new Metrics(this, 30662);
 
         metrics.addCustomChart(new SimplePie("strict_mode_status", () -> {
             return cache.isStrictMode() ? "Enabled" : "Disabled";
