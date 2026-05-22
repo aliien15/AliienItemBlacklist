@@ -9,10 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemsCache {
@@ -22,7 +19,7 @@ public class ItemsCache {
     private final YamlDocument settings;
 
     private final Set<Material> blacklistedItems = EnumSet.noneOf(Material.class);
-    private final Set<String> disabledWorlds = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+    private final Set<String> disabledWorlds = new HashSet<>();
 
     private CustomSound clickSound;
     private CustomSound successSound;
@@ -156,5 +153,7 @@ public class ItemsCache {
         });
     }
 
-    public boolean isWorldDisabled(String worldName) { return disabledWorlds.contains(worldName); }
+    public boolean isWorldDisabled(String worldName) {
+        return disabledWorlds.contains(worldName.toLowerCase(Locale.ROOT));
+    }
 }
