@@ -1,6 +1,7 @@
 package com.aliiensmp.aliienItemBlacklist.gui;
 
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
+import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.items.ItemBuilder;
 import com.aliiensmp.core.menu.AliienGUI;
@@ -33,7 +34,7 @@ public class SettingsGUI {
                 .addLoreLine("<gray>Sends an alert to online staff when a")
                 .addLoreLine("<gray>player handles a blacklisted item.")
                 .addLoreLine("")
-                .addLoreLine("<gray>Current Status: " + (cache.isShowAlerts() ? on : off))
+                .addLoreLine("<gray>Current Status: " + (Settings.SHOW_ALERTS ? on : off))
                 .addLoreLine("")
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleAlerts, plugin, cache));
@@ -44,7 +45,7 @@ public class SettingsGUI {
                 .addLoreLine("<gray>If enabled, NO ONE can use blacklisted")
                 .addLoreLine("<gray>items, completely ignoring bypass permissions.")
                 .addLoreLine("")
-                .addLoreLine("<gray>Current Status: " + (cache.isStrictMode() ? on : off))
+                .addLoreLine("<gray>Current Status: " + (Settings.STRICT_MODE ? on : off))
                 .addLoreLine("")
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleStrictMode, plugin, cache));
@@ -56,7 +57,7 @@ public class SettingsGUI {
                 .addLoreLine("<gray>items into a local logs.txt file.")
                 .addLoreLine("<dark_gray><i>*(Requires a server reboot to apply)*</i>")
                 .addLoreLine("")
-                .addLoreLine("<gray>Current Status: " + (cache.isEnableLogging() ? on : off))
+                .addLoreLine("<gray>Current Status: " + (Settings.ENABLE_LOGGING ? on : off))
                 .addLoreLine("")
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleEnableLogging, plugin, cache));
@@ -68,7 +69,7 @@ public class SettingsGUI {
                 .addLoreLine("<gray>update is available on startup.")
                 .addLoreLine("<dark_gray><i>*(Requires a server reboot to apply)*</i>")
                 .addLoreLine("")
-                .addLoreLine("<gray>Current Status: " + (cache.isCheckForUpdates() ? on : off))
+                .addLoreLine("<gray>Current Status: " + (Settings.CHECK_FOR_UPDATES ? on : off))
                 .addLoreLine("")
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleCheckForUpdates, plugin, cache));
@@ -79,7 +80,7 @@ public class SettingsGUI {
                 .addLoreLine("<gray>Toggles all audio feedback")
                 .addLoreLine("<gray>for the plugin menus.")
                 .addLoreLine("")
-                .addLoreLine("<gray>Current Status: " + (cache.isSoundsEnabled() ? on : off))
+                .addLoreLine("<gray>Current Status: " + (Settings.SOUNDS_ENABLED ? on : off))
                 .addLoreLine("")
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleSoundsEnabled, plugin, cache));

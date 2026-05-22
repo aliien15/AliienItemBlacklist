@@ -1,6 +1,7 @@
 package com.aliiensmp.aliienItemBlacklist.gui;
 
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
+import com.aliiensmp.aliienItemBlacklist.config.Messages;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.items.ItemBuilder;
 import com.aliiensmp.core.menu.AliienGUI;
@@ -98,17 +99,17 @@ public class BlacklistGUI {
 
         if (heldItem.getType().isAir()) {
             cache.playError(player);
-            MessageUtils.send(player, cache.getPrefix(), cache.getNotHoldingItemMsg());
+            MessageUtils.send(player, Messages.PREFIX, Messages.NOT_HOLDING_ITEM);
             return;
         }
 
         if (cache.addBlacklistedItem(heldItem.getType())) {
             cache.playSuccess(player);
             open(player, plugin, cache, page); // Refresh page
-            MessageUtils.send(player, cache.getPrefix(), cache.getAddedItemToBlacklistMsg(), "%item%", heldItem.getType().name());
+            MessageUtils.send(player, Messages.PREFIX, Messages.ADDED_ITEM_TO_BLACKLIST, "%item%", heldItem.getType().name());
         } else {
             cache.playError(player);
-            MessageUtils.send(player, cache.getPrefix(), cache.getItemAlreadyBlacklistedMsg(), "%item%", heldItem.getType().name());
+            MessageUtils.send(player, Messages.PREFIX, Messages.ITEM_ALREADY_BLACKLISTED, "%item%", heldItem.getType().name());
         }
     }
 }

@@ -4,7 +4,7 @@
   <groupId>com.aliiensmp</groupId>
   <artifactId>AliienItemBlacklist</artifactId>
   <name>aliienitemblacklist</name>
-  <version>2.0.2</version>
+  <version>2.0.3</version>
   <build>
     <defaultGoal>clean package</defaultGoal>
     <resources>
@@ -53,6 +53,14 @@
                   <pattern>org.bstats</pattern>
                   <shadedPattern>com.aliiensmp.aliienItemBlacklist.bstats</shadedPattern>
                 </relocation>
+                <relocation>
+                  <pattern>co.aikar.commands</pattern>
+                  <shadedPattern>com.aliiensmp.aliienItemBlacklist.acf.commands</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>co.aikar.locales</pattern>
+                  <shadedPattern>com.aliiensmp.aliienItemBlacklist.acf.locales</shadedPattern>
+                </relocation>
               </relocations>
             </configuration>
           </execution>
@@ -64,6 +72,10 @@
     <repository>
       <id>papermc-repo</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+    <repository>
+      <id>aikar</id>
+      <url>https://repo.aikar.co/content/groups/aikar/</url>
     </repository>
   </repositories>
   <dependencies>

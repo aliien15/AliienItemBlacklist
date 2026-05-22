@@ -1,13 +1,17 @@
 package com.aliiensmp.aliienItemBlacklist;
 
-import com.aliiensmp.aliienItemBlacklist.commands.AutoTabCompleter;
-import com.aliiensmp.aliienItemBlacklist.commands.Commands;
+import co.aikar.commands.MessageKeys;
+import co.aikar.commands.PaperCommandManager;
+import com.aliiensmp.aliienItemBlacklist.commands.ItemBlacklistCommand;
+import com.aliiensmp.aliienItemBlacklist.config.Messages;
+import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.aliienItemBlacklist.listeners.ItemBlacklistListener;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.AliienCore;
 import com.aliiensmp.core.config.ConfigManager;
 import com.aliiensmp.core.utils.ColorUtils;
 import com.aliiensmp.core.utils.updatechecker.UpdateChecker;
+import com.aliiensmp.core.utils.updatechecker.UpdateNotifyListener;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -20,7 +24,8 @@ import revxrsal.zapper.repository.Repository;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
-import java.util.Objects;
+import java.util.Locale;
+import java.util.logging.Level;
 
 public final class AliienItemBlacklist extends JavaPlugin {
 
@@ -66,7 +71,10 @@ public final class AliienItemBlacklist extends JavaPlugin {
             return;
         }
 
-        cache = new ItemsCache(this, config, messages, settings);
+        ConfigManager.bindConfig(messages, Messages.class);
+        ConfigManager.bindConfig(settings, Settings.class);
+
+        cache = new ItemsCache(this, config, settings);
         cache.loadCache();
 
         getServer().getPluginManager().registerEvents(new ItemBlacklistListener(this, cache), this);
@@ -84,11 +92,11 @@ public final class AliienItemBlacklist extends JavaPlugin {
         Metrics metrics = new Metrics(this, 30662);
 
         metrics.addCustomChart(new SimplePie("strict_mode_status", () -> {
-            return cache.isStrictMode() ? "Enabled" : "Disabled";
+            return Settings.STRICT_MODE ? "Enabled" : "Disabled";
         }));
 
         metrics.addCustomChart(new SimplePie("logging_status", () -> {
-            return cache.isEnableLogging() ? "Enabled" : "Disabled";
+            return Settings.ENABLE_LOGGING ? "Enabled" : "Disabled";
         }));
     }
 
@@ -104,18 +112,22 @@ public final class AliienItemBlacklist extends JavaPlugin {
             settings = ConfigManager.loadConfig(this, "settings.yml");
             return true;
         } catch (IOException e) {
-            getLogger().log(java.util.logging.Level.SEVERE, "Failed to load or update configuration files!", e);
+            getLogger().log(Level.SEVERE, "Failed to load or update configuration files!", e);
             return false;
         }
     }
 
     private void registerCommands() {
-        Objects.requireNonNull(getCommand("itemblacklist")).setExecutor(new Commands(this, cache));
-        Objects.requireNonNull(getCommand("itemblacklist")).setTabCompleter(new AutoTabCompleter());
+        PaperCommandManager commandManager = new PaperCommandManager(this);
+
+        commandManager.getLocales().addMessage(Locale.ENGLISH, MessageKeys.ERROR_PREFIX, Messages.PREFIX);
+        commandManager.getLocales().addMessage(Locale.ENGLISH, MessageKeys.PERMISSION_DENIED, Messages.NO_PERMISSION);
+
+        commandManager.registerCommand(new ItemBlacklistCommand(this, cache));
     }
 
     private void setupUpdateChecker() {
-        if (!settings.getBoolean("check-for-updates", true)) return;
+        if (!Settings.CHECK_FOR_UPDATES) return;
 
         new UpdateChecker(this, updateGistUrl).getVersion(version -> {
             if (!this.getPluginMeta().getVersion().equals(version)) {
@@ -124,11 +136,11 @@ public final class AliienItemBlacklist extends JavaPlugin {
         });
 
         getServer().getPluginManager().registerEvents(
-                new com.aliiensmp.core.utils.updatechecker.UpdateNotifyListener(
+                new UpdateNotifyListener(
                         this,
                         updateGistUrl,
                         "aliien.itemblacklist.version-notify",
-                        () -> ColorUtils.color(cache.getNewVersionMsg())
+                        () -> ColorUtils.color(Messages.NEW_VERSION)
                 ),
                 this
         );
