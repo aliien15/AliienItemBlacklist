@@ -3,6 +3,7 @@ package com.aliiensmp.aliienItemBlacklist.listeners;
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.config.Messages;
 import com.aliiensmp.aliienItemBlacklist.config.Settings;
+import com.aliiensmp.aliienItemBlacklist.services.AlertLogger;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -21,52 +22,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 
 public class ItemBlacklistListener implements Listener {
     private final ItemsCache cache;
     private final AliienItemBlacklist plugin;
+    private final AlertLogger alertLogger;
 
     public ItemBlacklistListener(AliienItemBlacklist plugin, ItemsCache cache) {
         this.plugin = plugin;
         this.cache = cache;
-    }
-
-    private void logBlacklistedItem(Player player, Material mat) {
-        if (!Settings.ENABLE_LOGGING) return;
-
-        CompletableFuture.runAsync(() -> {
-            try {
-                File dataFolder = plugin.getDataFolder();
-                if (!dataFolder.exists() && !dataFolder.mkdirs()) {
-                    plugin.getLogger().warning("Could not create plugin data folder for logging!");
-                    return;
-                }
-
-                File logFile = new File(dataFolder, "logs.txt");
-                if (!logFile.exists() && !logFile.createNewFile()) {
-                    plugin.getLogger().warning("Could not create logs.txt file!");
-                    return;
-                }
-
-                String timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
-                String logMessage = "[" + timestamp + "] Player " + player.getName() + " had a " + mat.name() + " item.";
-
-                try (FileWriter fw = new FileWriter(logFile, true);
-                     PrintWriter pw = new PrintWriter(fw)) {
-                    pw.println(logMessage);
-                }
-            } catch (IOException e) {
-                plugin.getLogger().log(java.util.logging.Level.SEVERE, "An error occurred while writing to logs.txt!", e);
-            }
-        });
+        this.alertLogger = plugin.getAlertLogger();
     }
 
     private boolean isBlacklisted(ItemStack item) {
@@ -80,7 +46,7 @@ public class ItemBlacklistListener implements Listener {
     }
 
     private void sendAlert(Player player, Material mat) {
-        logBlacklistedItem(player, mat);
+        alertLogger.logBlacklistedItem(player, mat);
         if (!Settings.SHOW_ALERTS) return;
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {

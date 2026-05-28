@@ -6,6 +6,7 @@ import com.aliiensmp.aliienItemBlacklist.commands.ItemBlacklistCommand;
 import com.aliiensmp.aliienItemBlacklist.config.Messages;
 import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.aliienItemBlacklist.listeners.ItemBlacklistListener;
+import com.aliiensmp.aliienItemBlacklist.services.AlertLogger;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.AliienCore;
 import com.aliiensmp.core.config.ConfigManager;
@@ -34,6 +35,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private YamlDocument settings;
 
     private ItemsCache cache;
+    private AlertLogger alertLogger;
 
     private final String updateGistUrl = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/AliienItemBlacklist-version.txt";
 
@@ -81,28 +83,20 @@ public final class AliienItemBlacklist extends JavaPlugin {
 
         registerCommands();
 
+        setupServices();
         setupUpdateChecker();
-
         setupBStats();
 
         getLogger().info("AliienItemBlacklist is enabled!");
     }
 
-    private void setupBStats() {
-        Metrics metrics = new Metrics(this, 30662);
-
-        metrics.addCustomChart(new SimplePie("strict_mode_status", () -> {
-            return Settings.STRICT_MODE ? "Enabled" : "Disabled";
-        }));
-
-        metrics.addCustomChart(new SimplePie("logging_status", () -> {
-            return Settings.ENABLE_LOGGING ? "Enabled" : "Disabled";
-        }));
-    }
-
     @Override
     public void onDisable() {
         getLogger().info("AliienItemBlacklist is disabled!");
+    }
+
+    private void setupServices() {
+        alertLogger = new AlertLogger(this);
     }
 
     private boolean loadConfigurations() {
@@ -115,6 +109,18 @@ public final class AliienItemBlacklist extends JavaPlugin {
             getLogger().log(Level.SEVERE, "Failed to load or update configuration files!", e);
             return false;
         }
+    }
+
+    private void setupBStats() {
+        Metrics metrics = new Metrics(this, 30662);
+
+        metrics.addCustomChart(new SimplePie("strict_mode_status", () -> {
+            return Settings.STRICT_MODE ? "Enabled" : "Disabled";
+        }));
+
+        metrics.addCustomChart(new SimplePie("logging_status", () -> {
+            return Settings.ENABLE_LOGGING ? "Enabled" : "Disabled";
+        }));
     }
 
     private void registerCommands() {
@@ -149,4 +155,8 @@ public final class AliienItemBlacklist extends JavaPlugin {
     public YamlDocument getCustomConfig() { return config; }
     public YamlDocument getMessages() { return messages; }
     public YamlDocument getSettings() { return settings; }
+
+    public AlertLogger getAlertLogger() {
+        return alertLogger;
+    }
 }
