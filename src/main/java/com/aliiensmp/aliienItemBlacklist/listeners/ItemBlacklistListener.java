@@ -40,9 +40,10 @@ public class ItemBlacklistListener implements Listener {
     }
 
     private boolean hasBypass(Player player, Material material) {
-        if (Settings.STRICT_MODE || player.hasPermission("aliien.itemblacklist.bypass")) return false;
+        if (Settings.STRICT_MODE) return false;
 
-        return player.hasPermission("aliien.itemblacklist.bypass." + material.name().toLowerCase(Locale.ROOT));
+        return player.hasPermission("aliien.itemblacklist.bypass")
+                || player.hasPermission("aliien.itemblacklist.bypass." + material.name().toLowerCase(Locale.ROOT));
     }
 
     private void sendAlert(Player player, Material mat) {

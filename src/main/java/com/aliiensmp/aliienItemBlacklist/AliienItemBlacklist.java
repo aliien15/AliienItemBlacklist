@@ -79,11 +79,11 @@ public final class AliienItemBlacklist extends JavaPlugin {
         cache = new ItemsCache(this, config, settings);
         cache.loadCache();
 
+        setupServices();
         getServer().getPluginManager().registerEvents(new ItemBlacklistListener(this, cache), this);
 
         registerCommands();
 
-        setupServices();
         setupUpdateChecker();
         setupBStats();
 
@@ -156,7 +156,5 @@ public final class AliienItemBlacklist extends JavaPlugin {
     public YamlDocument getMessages() { return messages; }
     public YamlDocument getSettings() { return settings; }
 
-    public AlertLogger getAlertLogger() {
-        return alertLogger;
-    }
+    public AlertLogger getAlertLogger() { return alertLogger; }
 }
