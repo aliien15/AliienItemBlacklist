@@ -31,5 +31,14 @@ sounds:
 disabled-worlds:
   - "example_world"
 
+# Discord-webhook section
+discord-webhook:
+  enabled: false
+  url: "YOUR_WEBHOOK_URL_HERE"
+  embed: # Valid placeholders: %player%, %item%
+    title: "⚠️ Blacklisted Item Deleted!"
+    description: "**%player%** has just been caught with a **blacklisted item** (%item%)"
+    color: "#FF0F0F"
+
 # DO NOT under any circumstance touch this unless you are told to by the official support
-config-version: 1
+config-version: 2

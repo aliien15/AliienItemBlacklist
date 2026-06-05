@@ -33,4 +33,19 @@ public class Settings {
 
     @Key("disabled-worlds")
     public static List<String> DISABLED_WORLDS = List.of();
+
+    @Key("discord-webhook.enabled")
+    public static boolean DISCORD_WEBHOOK_ENABLED = false;
+
+    @Key("discord-webhook.url")
+    public static String DISCORD_WEBHOOK_LINK = "";
+
+    @Key("discord-webhook.title")
+    public static String DISCORD_WEBHOOK_TITLE = "⚠️ Blacklisted Item Deleted!";
+
+    @Key("discord-webhook.description")
+    public static String DISCORD_WEBHOOK_DESCRIPTION = "**%player%** has just been caught with a **blacklisted item** (%item%)";
+
+    @Key("discord-webhook.color")
+    public static String DISCORD_WEBHOOK_COLOR = "#FF0F0F";
 }

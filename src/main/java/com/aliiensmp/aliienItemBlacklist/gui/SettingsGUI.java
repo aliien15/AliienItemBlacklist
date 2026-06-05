@@ -14,7 +14,7 @@ import static com.aliiensmp.aliienItemBlacklist.gui.MainMenuGUI.getFiller;
 public class SettingsGUI {
 
     public static void open(Player player, AliienItemBlacklist plugin, ItemsCache cache) {
-        AliienGUI gui = new AliienGUI("<#2b2d31><bold>ItemBlacklist <dark_gray>» <gray>Settings", 3);
+        AliienGUI gui = new AliienGUI("<#2b2d31><bold>ItemBlacklist <dark_gray>» <gray>Settings", 5);
 
         populateItems(gui, player, plugin, cache);
 
@@ -23,7 +23,8 @@ public class SettingsGUI {
 
     private static void populateItems(AliienGUI gui, Player player, AliienItemBlacklist plugin, ItemsCache cache) {
         ClickableItem filler = getFiller();
-        for (int i = 0; i < 27; i++) gui.setItem(i, filler);
+        // 5 rows * 9 slots = 45 total slots (0-44)
+        for (int i = 0; i < 45; i++) gui.setItem(i, filler);
 
         String on = "<green>Enabled";
         String off = "<red>Disabled";
@@ -55,7 +56,6 @@ public class SettingsGUI {
                 .name("<#ffff55><bold>Enable Logging")
                 .addLoreLine("<gray>Records all interactions with blacklisted")
                 .addLoreLine("<gray>items into a local logs.txt file.")
-                .addLoreLine("<dark_gray><i>*(Requires a server reboot to apply)*</i>")
                 .addLoreLine("")
                 .addLoreLine("<gray>Current Status: " + (Settings.ENABLE_LOGGING ? on : off))
                 .addLoreLine("")
@@ -85,6 +85,18 @@ public class SettingsGUI {
                 .addLoreLine("<yellow>Click to toggle!")
                 .buildClickable(e -> toggleSetting(player, cache::toggleSoundsEnabled, plugin, cache));
 
+        // Discord webhooks toggle
+        ClickableItem webhooksBtn = new ItemBuilder(Material.ENDER_PEARL)
+                .name("<#7289da><bold>Discord Alerts")
+                .addLoreLine("<gray>Toggles routing blacklisted item")
+                .addLoreLine("<gray>alerts directly to Discord.")
+                .addLoreLine("")
+                .addLoreLine("<gray>Current Status: " + (Settings.DISCORD_WEBHOOK_ENABLED ? on : off))
+                .addLoreLine("")
+                .addLoreLine("<yellow>Click to toggle!")
+                .buildClickable(e -> toggleSetting(player, cache::toggleWebhooksEnabled, plugin, cache));
+
+        // Back button
         ClickableItem backBtn = new ItemBuilder(Material.ARROW)
                 .name("<red><bold>Back")
                 .buildClickable(e -> {
@@ -92,12 +104,18 @@ public class SettingsGUI {
                     MainMenuGUI.open(player, plugin, cache);
                 });
 
+        // Second row
         gui.setItem(11, alertsBtn);
-        gui.setItem(12, strictBtn);
-        gui.setItem(13, loggingBtn);
-        gui.setItem(14, updatesBtn);
-        gui.setItem(15, soundsBtn);
-        gui.setItem(22, backBtn);
+        gui.setItem(13, strictBtn);
+        gui.setItem(15, loggingBtn);
+
+        // Third row
+        gui.setItem(20, updatesBtn);
+        gui.setItem(22, soundsBtn);
+        gui.setItem(24, webhooksBtn);
+
+        // Fifth row
+        gui.setItem(40, backBtn);
     }
 
     private static void toggleSetting(Player player, Runnable task, AliienItemBlacklist plugin, ItemsCache cache) {

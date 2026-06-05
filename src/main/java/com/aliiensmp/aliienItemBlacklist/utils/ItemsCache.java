@@ -2,9 +2,9 @@ package com.aliiensmp.aliienItemBlacklist.utils;
 
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.config.Settings;
+import com.aliiensmp.core.lib.boostedyaml.YamlDocument;
 import com.aliiensmp.core.utils.sounds.CustomSound;
 import com.aliiensmp.core.utils.sounds.SoundUtils;
-import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -130,6 +130,12 @@ public class ItemsCache {
     public void toggleSoundsEnabled() {
         Settings.SOUNDS_ENABLED = !Settings.SOUNDS_ENABLED;
         settings.set("sounds.enabled", Settings.SOUNDS_ENABLED);
+        saveSettingsAsync();
+    }
+
+    public void toggleWebhooksEnabled() {
+        Settings.DISCORD_WEBHOOK_ENABLED = !Settings.DISCORD_WEBHOOK_ENABLED;
+        settings.set("discord-webhook.enabled", Settings.DISCORD_WEBHOOK_ENABLED);
         saveSettingsAsync();
     }
 

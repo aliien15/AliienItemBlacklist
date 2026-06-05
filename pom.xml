@@ -6,7 +6,7 @@
 
     <groupId>com.aliiensmp</groupId>
     <artifactId>AliienItemBlacklist</artifactId>
-    <version>2.0.4</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>aliienitemblacklist</name>
@@ -24,8 +24,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -43,12 +42,9 @@
                             <filters>
                                 <filter>
                                     <artifact>com.aliiensmp:AliienCore</artifact>
-                                    <excludes>
-                                        <exclude>com/aliiensmp/core/lib/hikari/**</exclude>
-                                        <exclude>com/mysql/**</exclude>
-                                        <exclude>org/sqlite/**</exclude>
-                                        <exclude>dev/dejvokep/boostedyaml/**</exclude>
-                                    </excludes>
+                                    <includes>
+                                        <include>**</include>
+                                    </includes>
                                 </filter>
                             </filters>
                             <relocations>

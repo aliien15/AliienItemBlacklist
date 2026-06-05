@@ -10,21 +10,15 @@ import com.aliiensmp.aliienItemBlacklist.services.AlertLogger;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.AliienCore;
 import com.aliiensmp.core.config.ConfigManager;
+import com.aliiensmp.core.lib.boostedyaml.YamlDocument;
 import com.aliiensmp.core.utils.ColorUtils;
 import com.aliiensmp.core.utils.updatechecker.UpdateChecker;
 import com.aliiensmp.core.utils.updatechecker.UpdateNotifyListener;
-import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
-import revxrsal.zapper.DependencyManager;
-import revxrsal.zapper.classloader.URLClassLoaderWrapper;
-import revxrsal.zapper.relocation.Relocation;
-import revxrsal.zapper.repository.Repository;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URLClassLoader;
 import java.util.Locale;
 import java.util.logging.Level;
 
@@ -38,31 +32,6 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private AlertLogger alertLogger;
 
     private final String updateGistUrl = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/AliienItemBlacklist-version.txt";
-
-    @Override
-    public void onLoad() {
-        File librariesFolder = new File(getDataFolder().getParentFile(), "AliienCore");
-
-        DependencyManager dependencyManager = new DependencyManager(
-                librariesFolder,
-                URLClassLoaderWrapper.wrap((URLClassLoader) getClassLoader())
-        );
-
-        dependencyManager.repository(Repository.mavenCentral());
-        dependencyManager.repository(Repository.maven("https://jitpack.io"));
-
-        dependencyManager.dependency("com.zaxxer:HikariCP:5.1.0");
-        dependencyManager.dependency("com.mysql:mysql-connector-j:9.6.0");
-        dependencyManager.dependency("org.xerial:sqlite-jdbc:3.45.1.0");
-        dependencyManager.dependency("dev.dejvokep:boosted-yaml:1.3.7");
-
-        dependencyManager.relocate(new Relocation(
-                "com{}zaxxer{}hikari".replace("{}", "."),
-                "com.aliiensmp.core.lib.hikari"
-        ));
-
-        dependencyManager.load();
-    }
 
     @Override
     public void onEnable() {

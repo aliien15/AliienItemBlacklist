@@ -4,6 +4,7 @@ import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.config.Messages;
 import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.aliienItemBlacklist.services.AlertLogger;
+import com.aliiensmp.aliienItemBlacklist.services.DiscordLogger;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -48,6 +49,7 @@ public class ItemBlacklistListener implements Listener {
 
     private void sendAlert(Player player, Material mat) {
         alertLogger.logBlacklistedItem(player, mat);
+        DiscordLogger.sendEmbed(player.getName(), mat.name());
         if (!Settings.SHOW_ALERTS) return;
 
         Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
