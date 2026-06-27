@@ -17,6 +17,7 @@ import com.aliiensmp.core.utils.updatechecker.UpdateNotifyListener;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -31,7 +32,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private ItemsCache cache;
     private AlertLogger alertLogger;
 
-    private final String updateGistUrl = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/AliienItemBlacklist-version.txt";
+    private static final @NotNull String UPDATE_GIST_URL = "https://gist.githubusercontent.com/aliien15/acc305f002bd258e169b9316a96aca26/raw/AliienItemBlacklist-version.txt";
 
     @Override
     public void onEnable() {
@@ -104,7 +105,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private void setupUpdateChecker() {
         if (!Settings.CHECK_FOR_UPDATES) return;
 
-        new UpdateChecker(this, updateGistUrl).getVersion(version -> {
+        new UpdateChecker(this, UPDATE_GIST_URL).getVersion(version -> {
             if (!this.getPluginMeta().getVersion().equals(version)) {
                 getLogger().warning("A new update is available for AliienItemBlacklist!");
             }
@@ -113,7 +114,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
         getServer().getPluginManager().registerEvents(
                 new UpdateNotifyListener(
                         this,
-                        updateGistUrl,
+                        UPDATE_GIST_URL,
                         "aliien.itemblacklist.version-notify",
                         () -> ColorUtils.color(Messages.NEW_VERSION)
                 ),

@@ -12,6 +12,7 @@ This plugin was initially thought to be used for items you shouldn't be able to 
 * **Staff Alerts:** Broadcasts a fully customizable message alert to online staff when a player attempts to use an illegal item.
 * **Rich Customization:** Includes optional message prefixes, toggleable GUI/alert sounds, and full support for legacy color codes (e.g., `&f`) and hex codes (e.g., `&#ffffff`) across all messages.
 * **bStats Integration:** Lightweight metrics tracking to help improve the plugin over time.
+* **Proof-Logging:** Register every time a player is caught with a blacklisted item by both logging every occurrence in a .txt file and sending a message to a discord webhook (both options are toggleable)
 
 ## 🔐 Permissions
 * `aliien.itemblacklist.bypass`

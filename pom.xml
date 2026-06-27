@@ -6,7 +6,7 @@
 
     <groupId>com.aliiensmp</groupId>
     <artifactId>AliienItemBlacklist</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <packaging>jar</packaging>
 
     <name>aliienitemblacklist</name>
@@ -95,12 +95,6 @@
             <artifactId>paper-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.revxrsal</groupId>
-            <artifactId>zapper.api</artifactId>
-            <version>1.0.3</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.aliiensmp</groupId>

@@ -53,7 +53,7 @@ public class ItemBlacklistCommand extends BaseCommand {
                 success = false;
             }
 
-            boolean finalSuccess = success;
+            final boolean finalSuccess = success;
             Runnable task = () -> {
                 if (finalSuccess) {
                     MessageUtils.send(sender, Messages.PREFIX, Messages.RELOAD);

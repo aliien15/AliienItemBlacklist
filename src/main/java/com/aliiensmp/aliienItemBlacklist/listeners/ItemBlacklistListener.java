@@ -52,11 +52,12 @@ public class ItemBlacklistListener implements Listener {
         DiscordLogger.sendEmbed(player.getName(), mat.name());
         if (!Settings.SHOW_ALERTS) return;
 
-        Bukkit.getOnlinePlayers().forEach(onlinePlayer -> {
-                    if (onlinePlayer.hasPermission("aliien.itemblacklist.alert")) {
-                        MessageUtils.send(onlinePlayer, Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", mat.name());
-                        cache.playAlert(onlinePlayer);
-                    }
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .filter(onlinePlayer -> onlinePlayer.hasPermission("aliien.itemblacklist.alert"))
+                .forEach(onlinePlayer -> {
+                    MessageUtils.send(onlinePlayer, Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", mat.name());
+                    cache.playAlert(onlinePlayer);
                 });
 
         MessageUtils.send(Bukkit.getConsoleSender(), Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", mat.name());

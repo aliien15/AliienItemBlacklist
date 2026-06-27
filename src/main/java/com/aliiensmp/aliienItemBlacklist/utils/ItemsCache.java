@@ -42,21 +42,15 @@ public class ItemsCache {
         errorSound = SoundUtils.parse(Settings.SOUND_ERROR);
         alertSound = SoundUtils.parse(Settings.SOUND_ALERT);
 
-        if (Settings.DISABLED_WORLDS != null) {
-            disabledWorlds.addAll(Settings.DISABLED_WORLDS);
-        }
+        disabledWorlds.addAll(Settings.DISABLED_WORLDS);
 
-        List<String> items = config.getStringList("blacklisted-items");
-        if (items != null) {
-            for (String itemName : items) {
-                Material mat = Material.matchMaterial(itemName.toUpperCase());
-                if (mat != null) {
-                    blacklistedItems.add(mat);
-                } else {
-                    plugin.getLogger().warning("Invalid material in config: " + itemName);
-                }
-            }
-        }
+        config.getStringList("blacklisted-items").forEach(itemName ->
+                Optional.ofNullable(Material.matchMaterial(itemName.toUpperCase()))
+                        .ifPresentOrElse(
+                                blacklistedItems::add,
+                                () -> plugin.getLogger().warning("Invalid material in config: " + itemName)
+                        )
+        );
 
         plugin.getLogger().info("Successfully loaded " + blacklistedItems.size() + " blacklisted items into memory!");
     }

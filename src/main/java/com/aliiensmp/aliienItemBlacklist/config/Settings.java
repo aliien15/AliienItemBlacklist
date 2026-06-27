@@ -1,9 +1,12 @@
 package com.aliiensmp.aliienItemBlacklist.config;
 
 import com.aliiensmp.core.config.Key;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class Settings {
+
     @Key("show-alerts")
     public static boolean SHOW_ALERTS = true;
 
@@ -20,32 +23,32 @@ public class Settings {
     public static boolean SOUNDS_ENABLED = true;
 
     @Key("sounds.click")
-    public static String SOUND_CLICK = "none";
+    public static @NotNull String SOUND_CLICK = "none";
 
     @Key("sounds.success")
-    public static String SOUND_SUCCESS = "none";
+    public static @NotNull String SOUND_SUCCESS = "none";
 
     @Key("sounds.error")
-    public static String SOUND_ERROR = "none";
+    public static @NotNull String SOUND_ERROR = "none";
 
     @Key("sounds.alert")
-    public static String SOUND_ALERT = "none";
+    public static @NotNull String SOUND_ALERT = "none";
 
     @Key("disabled-worlds")
-    public static List<String> DISABLED_WORLDS = List.of();
+    public static @NotNull List<String> DISABLED_WORLDS = List.of();
 
     @Key("discord-webhook.enabled")
     public static boolean DISCORD_WEBHOOK_ENABLED = false;
 
     @Key("discord-webhook.url")
-    public static String DISCORD_WEBHOOK_LINK = "";
+    public static @NotNull String DISCORD_WEBHOOK_LINK = "";
 
     @Key("discord-webhook.title")
-    public static String DISCORD_WEBHOOK_TITLE = "⚠️ Blacklisted Item Deleted!";
+    public static @NotNull String DISCORD_WEBHOOK_TITLE = "⚠️ Blacklisted Item Deleted!";
 
     @Key("discord-webhook.description")
-    public static String DISCORD_WEBHOOK_DESCRIPTION = "**%player%** has just been caught with a **blacklisted item** (%item%)";
+    public static @NotNull String DISCORD_WEBHOOK_DESCRIPTION = "**%player%** has just been caught with a **blacklisted item** (%item%)";
 
     @Key("discord-webhook.color")
-    public static String DISCORD_WEBHOOK_COLOR = "#FF0F0F";
+    public static @NotNull String DISCORD_WEBHOOK_COLOR = "#FF0F0F";
 }

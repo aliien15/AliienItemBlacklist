@@ -22,6 +22,13 @@ public class AlertLogger {
         this.plugin = plugin;
     }
 
+    /**
+     * Logs a blacklist item removal into a .txt file
+     *
+     * @param player the player caught with a blacklisted item
+     * @param mat the blacklisted material that the player was using
+     * @requires {@code player != null && mat != null}
+     */
     public void logBlacklistedItem(Player player, Material mat) {
         if (!Settings.ENABLE_LOGGING) return;
 
