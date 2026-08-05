@@ -47,9 +47,9 @@ public class ItemBlacklistListener implements Listener {
                 || player.hasPermission("aliien.itemblacklist.bypass." + material.name().toLowerCase(Locale.ROOT));
     }
 
-    private void sendAlert(Player player, Material mat) {
+    private void sendAlert(Player player, Material mat, String event) {
         alertLogger.logBlacklistedItem(player, mat);
-        DiscordLogger.sendEmbed(player.getName(), mat.name());
+        DiscordLogger.sendEmbed(player.getName(), mat.name(), event);
         if (!Settings.SHOW_ALERTS) return;
 
         Bukkit.getOnlinePlayers()
@@ -81,7 +81,7 @@ public class ItemBlacklistListener implements Listener {
         }
 
         if (confiscated) {
-            sendAlert(player, lastBadMat);
+            sendAlert(player, lastBadMat, "Player join");
         }
     }
 
@@ -99,11 +99,11 @@ public class ItemBlacklistListener implements Listener {
         if (badMain) {
             event.setCancelled(true);
             player.getInventory().setItemInOffHand(null);
-            sendAlert(player, mainHand.getType());
+            sendAlert(player, mainHand.getType(), "Item swap to main hand");
         } else if (badOff) {
             event.setCancelled(true);
             player.getInventory().setItemInMainHand(null);
-            sendAlert(player, offHand.getType());
+            sendAlert(player, offHand.getType(), "Item swap to off hand");
         }
     }
 
@@ -120,7 +120,7 @@ public class ItemBlacklistListener implements Listener {
         Material savedBadMat = item.getType();
         event.setCancelled(true);
         event.getItem().remove();
-        sendAlert(player, savedBadMat);
+        sendAlert(player, savedBadMat, "Pickup item");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -137,7 +137,7 @@ public class ItemBlacklistListener implements Listener {
                 Material savedBadMat = hotbarItem.getType();
                 event.setCancelled(true);
                 player.getInventory().setItem(event.getHotbarButton(), null);
-                sendAlert(player, savedBadMat);
+                sendAlert(player, savedBadMat, "Item click on inventory");
                 return;
             }
         }
@@ -156,14 +156,14 @@ public class ItemBlacklistListener implements Listener {
             Material savedBadMat = currentItem.getType();
             event.setCancelled(true);
             event.setCurrentItem(null);
-            sendAlert(player, savedBadMat);
+            sendAlert(player, savedBadMat, "Item click on inventory");
         }
 
         if (blockCursor) {
             Material savedBadMat = cursorItem.getType();
             event.setCancelled(true);
             event.getView().setCursor(null);
-            sendAlert(player, savedBadMat);
+            sendAlert(player, savedBadMat, "Item click on inventory");
         }
     }
 
@@ -180,7 +180,7 @@ public class ItemBlacklistListener implements Listener {
         Material savedBadMat = oldCursor.getType();
         event.setCancelled(true);
         event.getView().setCursor(null);
-        sendAlert(player, savedBadMat);
+        sendAlert(player, savedBadMat, "Item shift-click on inventory");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -208,6 +208,6 @@ public class ItemBlacklistListener implements Listener {
 
         Material savedBadMat = droppedItem.getType();
         event.getItemDrop().remove();
-        sendAlert(player, savedBadMat);
+        sendAlert(player, savedBadMat, "Drop item");
     }
 }

@@ -43,12 +43,15 @@ public class Settings {
     @Key("discord-webhook.url")
     public static @NotNull String DISCORD_WEBHOOK_LINK = "";
 
-    @Key("discord-webhook.title")
+    @Key("discord-webhook.embed.role-to-ping")
+    public static @NotNull String DISCORD_WEBHOOK_ROLE = "";
+
+    @Key("discord-webhook.embed.title")
     public static @NotNull String DISCORD_WEBHOOK_TITLE = "⚠️ Blacklisted Item Deleted!";
 
-    @Key("discord-webhook.description")
+    @Key("discord-webhook.embed.description")
     public static @NotNull String DISCORD_WEBHOOK_DESCRIPTION = "**%player%** has just been caught with a **blacklisted item** (%item%)";
 
-    @Key("discord-webhook.color")
+    @Key("discord-webhook.embed.color")
     public static @NotNull String DISCORD_WEBHOOK_COLOR = "#FF0F0F";
 }

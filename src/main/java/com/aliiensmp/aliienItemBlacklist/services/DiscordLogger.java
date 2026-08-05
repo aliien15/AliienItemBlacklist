@@ -10,15 +10,18 @@ public class DiscordLogger {
      *
      * @param playerName the player caught with a blacklisted item
      * @param materialName the blacklisted item that the player was caught with
+     * @param playerAction the action/event that the players was doing/triggering
      * @requires {@code playerName != null && materialName != null}
      */
-    public static void sendEmbed(String playerName, String materialName) {
+    public static void sendEmbed(String playerName, String materialName, String playerAction) {
         if (!Settings.DISCORD_WEBHOOK_ENABLED) return;
 
         DiscordWebhook webhook = new DiscordWebhook(Settings.DISCORD_WEBHOOK_LINK)
                 .setTitle(Settings.DISCORD_WEBHOOK_TITLE)
                 .setDescription(Settings.DISCORD_WEBHOOK_DESCRIPTION.replace("%player%", playerName).replace("%item%", materialName))
-                .setColor(Settings.DISCORD_WEBHOOK_COLOR);
+                .addField("Player Action:", playerAction, false)
+                .setColor(Settings.DISCORD_WEBHOOK_COLOR)
+                .setContent(Settings.DISCORD_WEBHOOK_ROLE, true);
 
         webhook.sendAsync();
     }
