@@ -12,6 +12,7 @@ import com.aliiensmp.core.AliienCore;
 import com.aliiensmp.core.config.ConfigManager;
 import com.aliiensmp.core.lib.boostedyaml.YamlDocument;
 import com.aliiensmp.core.utils.ColorUtils;
+import com.aliiensmp.core.utils.DebugUtils;
 import com.aliiensmp.core.utils.updatechecker.UpdateChecker;
 import com.aliiensmp.core.utils.updatechecker.UpdateNotifyListener;
 import org.bstats.bukkit.Metrics;
@@ -36,15 +37,13 @@ public final class AliienItemBlacklist extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        AliienCore.init(this);
+        AliienCore.init(this, true, false, false);
 
         if (!loadConfigurations()) {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        ConfigManager.bindConfig(messages, Messages.class);
-        ConfigManager.bindConfig(settings, Settings.class);
 
         cache = new ItemsCache(this, config, settings);
         cache.loadCache();
@@ -62,6 +61,7 @@ public final class AliienItemBlacklist extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        AliienCore.shutdown();
         getLogger().info("AliienItemBlacklist is disabled!");
     }
 
@@ -72,8 +72,16 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private boolean loadConfigurations() {
         try {
             config = ConfigManager.loadConfig(this, "config.yml");
+            DebugUtils.send("Successfully loaded config.yml");
+
             messages = ConfigManager.loadConfig(this, "messages.yml");
+            ConfigManager.bindConfig(messages, Messages.class);
+            DebugUtils.send("Successfully loaded messages.yml");
+
             settings = ConfigManager.loadConfig(this, "settings.yml");
+            ConfigManager.bindConfig(settings, Settings.class);
+            DebugUtils.send("Successfully loaded settings.yml");
+
             return true;
         } catch (IOException e) {
             getLogger().log(Level.SEVERE, "Failed to load or update configuration files!", e);
@@ -84,13 +92,9 @@ public final class AliienItemBlacklist extends JavaPlugin {
     private void setupBStats() {
         Metrics metrics = new Metrics(this, 30662);
 
-        metrics.addCustomChart(new SimplePie("strict_mode_status", () -> {
-            return Settings.STRICT_MODE ? "Enabled" : "Disabled";
-        }));
+        metrics.addCustomChart(new SimplePie("strict_mode_status", () -> Settings.STRICT_MODE ? "Enabled" : "Disabled"));
 
-        metrics.addCustomChart(new SimplePie("logging_status", () -> {
-            return Settings.ENABLE_LOGGING ? "Enabled" : "Disabled";
-        }));
+        metrics.addCustomChart(new SimplePie("logging_status", () -> Settings.ENABLE_LOGGING ? "Enabled" : "Disabled"));
     }
 
     private void registerCommands() {

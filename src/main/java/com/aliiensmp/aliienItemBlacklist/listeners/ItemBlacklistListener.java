@@ -47,20 +47,20 @@ public class ItemBlacklistListener implements Listener {
                 || player.hasPermission("aliien.itemblacklist.bypass." + material.name().toLowerCase(Locale.ROOT));
     }
 
-    private void sendAlert(Player player, Material mat, String event) {
-        alertLogger.logBlacklistedItem(player, mat);
-        DiscordLogger.sendEmbed(player.getName(), mat.name(), event);
+    private void sendAlert(Player player, ItemStack item, String event) {
+        alertLogger.logBlacklistedItem(player, item.getType());
+        DiscordLogger.sendEmbed(player, item, event);
         if (!Settings.SHOW_ALERTS) return;
 
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(onlinePlayer -> onlinePlayer.hasPermission("aliien.itemblacklist.alert"))
                 .forEach(onlinePlayer -> {
-                    MessageUtils.send(onlinePlayer, Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", mat.name());
+                    MessageUtils.send(onlinePlayer, Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", item.getType().name());
                     cache.playAlert(onlinePlayer);
                 });
 
-        MessageUtils.send(Bukkit.getConsoleSender(), Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", mat.name());
+        MessageUtils.send(Bukkit.getConsoleSender(), Messages.PREFIX, Messages.ALERT, "%player%", player.getName(), "%item%", item.getType().name());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -69,19 +69,19 @@ public class ItemBlacklistListener implements Listener {
         if (cache.isWorldDisabled(player.getWorld().getName())) return;
 
         boolean confiscated = false;
-        Material lastBadMat = null;
+        ItemStack lastBadItem = null;
 
         for (int i = 0; i < player.getInventory().getSize(); i++) {
             ItemStack item = player.getInventory().getItem(i);
             if (isBlacklisted(item) && !hasBypass(player, item.getType())) {
-                lastBadMat = item.getType();
+                lastBadItem = item;
                 player.getInventory().setItem(i, null);
                 confiscated = true;
             }
         }
 
         if (confiscated) {
-            sendAlert(player, lastBadMat, "Player join");
+            sendAlert(player, lastBadItem, "Player join");
         }
     }
 
@@ -99,11 +99,11 @@ public class ItemBlacklistListener implements Listener {
         if (badMain) {
             event.setCancelled(true);
             player.getInventory().setItemInOffHand(null);
-            sendAlert(player, mainHand.getType(), "Item swap to main hand");
+            sendAlert(player, mainHand, "Item swap to main hand");
         } else if (badOff) {
             event.setCancelled(true);
             player.getInventory().setItemInMainHand(null);
-            sendAlert(player, offHand.getType(), "Item swap to off hand");
+            sendAlert(player, offHand, "Item swap to off hand");
         }
     }
 
@@ -117,10 +117,9 @@ public class ItemBlacklistListener implements Listener {
         if (!isBlacklisted(item)) return;
         if (hasBypass(player, item.getType())) return;
 
-        Material savedBadMat = item.getType();
         event.setCancelled(true);
         event.getItem().remove();
-        sendAlert(player, savedBadMat, "Pickup item");
+        sendAlert(player, item, "Pickup item");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -134,10 +133,13 @@ public class ItemBlacklistListener implements Listener {
         if (event.getClick() == ClickType.NUMBER_KEY) {
             ItemStack hotbarItem = player.getInventory().getItem(event.getHotbarButton());
             if (isBlacklisted(hotbarItem) && !hasBypass(player, hotbarItem.getType())) {
-                Material savedBadMat = hotbarItem.getType();
                 event.setCancelled(true);
+
                 player.getInventory().setItem(event.getHotbarButton(), null);
-                sendAlert(player, savedBadMat, "Item click on inventory");
+
+                String invType = event.getClickedInventory() != null ? event.getClickedInventory().getType().name() : "OUTSIDE";
+                sendAlert(player, hotbarItem, "Item click on inventory: " + invType);
+
                 return;
             }
         }
@@ -153,17 +155,20 @@ public class ItemBlacklistListener implements Listener {
         if (!blockCurrent && !blockCursor) return;
 
         if (blockCurrent) {
-            Material savedBadMat = currentItem.getType();
+
             event.setCancelled(true);
             event.setCurrentItem(null);
-            sendAlert(player, savedBadMat, "Item click on inventory");
+
+            String invType = event.getClickedInventory() != null ? event.getClickedInventory().getType().name() : "OUTSIDE";
+            sendAlert(player, currentItem, "Item click on inventory: " + invType);
         }
 
         if (blockCursor) {
-            Material savedBadMat = cursorItem.getType();
             event.setCancelled(true);
             event.getView().setCursor(null);
-            sendAlert(player, savedBadMat, "Item click on inventory");
+
+            String invType = event.getClickedInventory() != null ? event.getClickedInventory().getType().name() : "OUTSIDE";
+            sendAlert(player, cursorItem, "Item click on inventory: " + invType);
         }
     }
 
@@ -177,10 +182,10 @@ public class ItemBlacklistListener implements Listener {
         if (!isBlacklisted(oldCursor)) return;
         if (hasBypass(player, oldCursor.getType())) return;
 
-        Material savedBadMat = oldCursor.getType();
         event.setCancelled(true);
         event.getView().setCursor(null);
-        sendAlert(player, savedBadMat, "Item shift-click on inventory");
+
+        sendAlert(player, oldCursor, "Item shift-click on inventory: " + event.getInventory().getType().name());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -206,8 +211,7 @@ public class ItemBlacklistListener implements Listener {
         if (!isBlacklisted(droppedItem)) return;
         if (hasBypass(player, droppedItem.getType())) return;
 
-        Material savedBadMat = droppedItem.getType();
         event.getItemDrop().remove();
-        sendAlert(player, savedBadMat, "Drop item");
+        sendAlert(player, droppedItem, "Drop item");
     }
 }

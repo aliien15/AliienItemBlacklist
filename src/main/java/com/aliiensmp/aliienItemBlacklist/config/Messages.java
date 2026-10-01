@@ -29,6 +29,12 @@ public class Messages {
     @Key("item-already-blacklisted")
     public static @NotNull String ITEM_ALREADY_BLACKLISTED = "<red>The item %item% is already blacklisted!";
 
+    @Key("debug-on")
+    public static @NotNull String DEBUG_ON = "<green>Debug mode has been toggled on!";
+
+    @Key("debug-off")
+    public static @NotNull String DEBUG_OFF = "<green>Debug mode has been toggled off!";
+
     @Key("new-version")
     public static @NotNull String NEW_VERSION = "<green>A new AliienItemBlacklist version is now available!";
 }

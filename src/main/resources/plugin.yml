@@ -14,6 +14,7 @@ permissions:
       aliien.itemblacklist.alert: true
       aliien.itemblacklist.edit: true
       aliien.itemblacklist.version-notify: true
+      aliien.itemblacklist.debug: true
   aliien.itemblacklist.bypass:
     description: Allows a player to pick up and interact with blacklisted items.
     default: op
@@ -28,4 +29,7 @@ permissions:
     default: op
   aliien.itemblacklist.version-notify:
     description: Receives a notification when there is a new plugin update.
+    default: op
+  aliien.itemblacklist.debug:
+    description: Toggles the debug mode, used to find issues more easily
     default: op

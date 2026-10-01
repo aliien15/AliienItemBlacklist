@@ -3,6 +3,7 @@ package com.aliiensmp.aliienItemBlacklist.utils;
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
 import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.core.lib.boostedyaml.YamlDocument;
+import com.aliiensmp.core.utils.DebugUtils;
 import com.aliiensmp.core.utils.sounds.CustomSound;
 import com.aliiensmp.core.utils.sounds.SoundUtils;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 public class ItemsCache {
 
@@ -48,11 +50,11 @@ public class ItemsCache {
                 Optional.ofNullable(Material.matchMaterial(itemName.toUpperCase()))
                         .ifPresentOrElse(
                                 blacklistedItems::add,
-                                () -> plugin.getLogger().warning("Invalid material in config: " + itemName)
+                                () -> DebugUtils.send(Level.WARNING, "Invalid material in config: " + itemName)
                         )
         );
 
-        plugin.getLogger().info("Successfully loaded " + blacklistedItems.size() + " blacklisted items into memory!");
+        DebugUtils.send("Successfully loaded " + blacklistedItems.size() + " blacklisted items into memory!");
     }
 
     public boolean isBlacklisted(Material material) {
@@ -112,6 +114,7 @@ public class ItemsCache {
     public void toggleEnableLogging() {
         Settings.ENABLE_LOGGING = !Settings.ENABLE_LOGGING;
         settings.set("enable-logging", Settings.ENABLE_LOGGING);
+        plugin.getAlertLogger().toggle(Settings.ENABLE_LOGGING);
         saveSettingsAsync();
     }
 
@@ -138,7 +141,7 @@ public class ItemsCache {
             try {
                 settings.save();
             } catch (IOException e) {
-                plugin.getLogger().severe("Failed to save settings.yml: " + e.getMessage());
+                DebugUtils.send(Level.SEVERE, "Failed to save settings.yml: " + e.getMessage());
             }
         });
     }
@@ -148,7 +151,7 @@ public class ItemsCache {
             try {
                 config.save();
             } catch (IOException e) {
-                plugin.getLogger().severe("Failed to save config.yml: " + e.getMessage());
+                DebugUtils.send(Level.SEVERE, "Failed to save config.yml: " + e.getMessage());
             }
         });
     }

@@ -11,6 +11,7 @@ import com.aliiensmp.aliienItemBlacklist.config.Settings;
 import com.aliiensmp.aliienItemBlacklist.gui.MainMenuGUI;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.config.ConfigManager;
+import com.aliiensmp.core.utils.DebugUtils;
 import com.aliiensmp.core.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -68,5 +69,15 @@ public class ItemBlacklistCommand extends BaseCommand {
                 plugin.getServer().getGlobalRegionScheduler().run(plugin, scheduledTask -> task.run());
             }
         });
+    }
+
+    @Subcommand("debug")
+    @CommandPermission("aliien.itemblacklist.debug")
+    public void onToggleDebug(CommandSender sender) {
+        if (DebugUtils.toggleDebug()) {
+            MessageUtils.send(sender, Messages.PREFIX, Messages.DEBUG_ON);
+        } else {
+            MessageUtils.send(sender, Messages.PREFIX, Messages.DEBUG_OFF);
+        }
     }
 }

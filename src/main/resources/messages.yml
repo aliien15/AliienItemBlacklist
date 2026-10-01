@@ -17,8 +17,12 @@ not-holding-item: "<red>You must be holding an item to do this!"
 added-item-to-blacklist: "<green>The item %item% has successfully been added to the blacklist!"
 # Tried to add an item to the blacklist through the in-game editor, but it was already there
 item-already-blacklisted: "<red>The item %item% is already blacklisted!"
+# When toggling debug mode on
+debug-on: "<green>Debug mode has been toggled on!"
+# When toggling debug mode off
+debug-off: "<green>Debug mode has been toggled off!"
 # If there is a new plugin version available
 new-version: "<green>A new AliienItemBlacklist version is now available!"
 
 # DO NOT under any circumstance touch this unless you are told to by the official support
-config-version: 1
+config-version: 2
