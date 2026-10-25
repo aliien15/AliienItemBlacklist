@@ -29,7 +29,7 @@ This plugin was initially thought to be used for items you shouldn't be able to 
 
 * `aliien.itemblacklist.version-notify`
   * **Description:** Allows the player to get in-game notification when there are new plugin updates.
-  
+
 ## 📦 Installation
 1. Download the latest `AliienItemBlacklist.jar` from the Releases page.
 2. Drop the `.jar` file into your server's `plugins/` folder.
