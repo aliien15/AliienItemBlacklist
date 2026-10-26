@@ -3,66 +3,59 @@ package com.aliiensmp.aliienItemBlacklist.gui;
 import static com.aliiensmp.aliienItemBlacklist.gui.MainMenuGUI.getFiller;
 
 import com.aliiensmp.aliienItemBlacklist.AliienItemBlacklist;
-import com.aliiensmp.aliienItemBlacklist.config.Messages;
 import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.items.ItemBuilder;
 import com.aliiensmp.core.menu.AliienGUI;
 import com.aliiensmp.core.menu.ClickableItem;
-import com.aliiensmp.core.utils.MessageUtils;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class BlacklistGUI {
+
+    private static final List<Integer> CONTENT_SLOTS = IntStream.range(0, 45).boxed().toList();
 
     public static void open(Player player, AliienItemBlacklist plugin, ItemsCache cache, int page) {
         AliienGUI gui =
                 new AliienGUI("<#2b2d31><bold>ItemBlacklist <dark_gray>» <gray>Page %page%", 6);
 
         List<Material> items = new ArrayList<>(cache.getBlacklistedItems());
-        int maxPerPage = 45;
+        int maxPerPage = CONTENT_SLOTS.size();
 
-        // Pagination checks
         boolean hasNextPage = items.size() > page * maxPerPage;
         boolean hasPrevPage = page > 1;
 
-        buildBlacklistedItems(gui, player, plugin, cache, page, items, maxPerPage);
+        gui.setItems(
+                CONTENT_SLOTS,
+                items,
+                page,
+                mat ->
+                        new ItemBuilder(mat)
+                                .addLoreLine("")
+                                .addLoreLine("<red><bold>CLICK TO REMOVE")
+                                .buildClickable(
+                                        e -> {
+                                            if (cache.removeBlacklistedItem(mat)) {
+                                                cache.playSuccess(player);
+
+                                                // Step back a page if the player just removed the
+                                                // last item on the current page
+                                                int newTotal = items.size() - 1;
+                                                int targetPage =
+                                                        (newTotal <= (page - 1) * maxPerPage
+                                                                        && page > 1)
+                                                                ? page - 1
+                                                                : page;
+                                                open(player, plugin, cache, targetPage);
+                                            }
+                                        }));
+
         buildNavigationItems(gui, player, plugin, cache, page, hasNextPage, hasPrevPage);
-
         gui.open(player, page);
-    }
-
-    private static void buildBlacklistedItems(
-            AliienGUI gui,
-            Player player,
-            AliienItemBlacklist plugin,
-            ItemsCache cache,
-            int page,
-            List<Material> items,
-            int maxPerPage) {
-        int startIndex = (page - 1) * maxPerPage;
-        int endIndex = Math.min(startIndex + maxPerPage, items.size());
-
-        int slot = 0;
-        for (int i = startIndex; i < endIndex; i++) {
-            Material mat = items.get(i);
-            ClickableItem cItem =
-                    new ItemBuilder(mat)
-                            .addLoreLine("")
-                            .addLoreLine("<red><bold>CLICK TO REMOVE")
-                            .buildClickable(
-                                    e -> {
-                                        if (cache.removeBlacklistedItem(mat)) {
-                                            cache.playSuccess(player);
-                                            open(player, plugin, cache, page);
-                                        }
-                                    });
-            gui.setItem(slot++, cItem);
-        }
     }
 
     private static void buildNavigationItems(
@@ -74,7 +67,9 @@ public class BlacklistGUI {
             boolean hasNextPage,
             boolean hasPrevPage) {
         ClickableItem filler = getFiller();
-        for (int i = 45; i < 54; i++) gui.setItem(i, filler);
+        for (int i = 45; i < 54; i++) {
+            gui.setItem(i, filler);
+        }
 
         // Back to main menu
         gui.setItem(
@@ -100,13 +95,18 @@ public class BlacklistGUI {
                                     }));
         }
 
-        ClickableItem addBtn =
+        // Open inventory mirror submenu
+        gui.setItem(
+                49,
                 new ItemBuilder(Material.HOPPER)
-                        .name("<#55ff55><bold>Add Item")
-                        .addLoreLine("<gray>Hold the item you want to blacklist")
-                        .addLoreLine("<gray>in your hand, then click here!")
-                        .buildClickable(e -> handleAddAction(player, plugin, cache, page));
-        gui.setItem(49, addBtn);
+                        .name("<#55ff55><bold>Add Items")
+                        .addLoreLine("<gray>Click to view and blacklist items")
+                        .addLoreLine("<gray>currently in your inventory!")
+                        .buildClickable(
+                                e -> {
+                                    cache.playClick(player);
+                                    BlacklistAddGUI.open(player, plugin, cache, page);
+                                }));
 
         // Next page button
         if (hasNextPage) {
@@ -119,36 +119,6 @@ public class BlacklistGUI {
                                         cache.playClick(player);
                                         open(player, plugin, cache, page + 1);
                                     }));
-        }
-    }
-
-    private static void handleAddAction(
-            Player player, AliienItemBlacklist plugin, ItemsCache cache, int page) {
-        ItemStack heldItem = player.getInventory().getItemInMainHand();
-
-        if (heldItem.getType().isAir()) {
-            cache.playError(player);
-            MessageUtils.send(player, Messages.PREFIX, Messages.NOT_HOLDING_ITEM);
-            return;
-        }
-
-        if (cache.addBlacklistedItem(heldItem.getType())) {
-            cache.playSuccess(player);
-            open(player, plugin, cache, page); // Refresh page
-            MessageUtils.send(
-                    player,
-                    Messages.PREFIX,
-                    Messages.ADDED_ITEM_TO_BLACKLIST,
-                    "%item%",
-                    heldItem.getType().name());
-        } else {
-            cache.playError(player);
-            MessageUtils.send(
-                    player,
-                    Messages.PREFIX,
-                    Messages.ITEM_ALREADY_BLACKLISTED,
-                    "%item%",
-                    heldItem.getType().name());
         }
     }
 }
