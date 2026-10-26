@@ -7,7 +7,6 @@ import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.items.ItemBuilder;
 import com.aliiensmp.core.menu.AliienGUI;
 import com.aliiensmp.core.menu.ClickableItem;
-import com.aliiensmp.core.utils.DebugUtils;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,13 +40,6 @@ public class BlacklistGUI {
                                 .buildClickable(
                                         e -> {
                                             if (cache.removeBlacklistedItem(mat)) {
-                                                DebugUtils.send(
-                                                        "Player %player% removed %item% from the"
-                                                                + " blacklist.",
-                                                        "%player%",
-                                                        player.getName(),
-                                                        "%item%",
-                                                        mat.name());
                                                 cache.playSuccess(player);
 
                                                 // Step back a page if the player just removed the

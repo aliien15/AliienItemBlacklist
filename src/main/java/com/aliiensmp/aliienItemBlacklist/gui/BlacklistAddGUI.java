@@ -8,7 +8,6 @@ import com.aliiensmp.aliienItemBlacklist.utils.ItemsCache;
 import com.aliiensmp.core.items.ItemBuilder;
 import com.aliiensmp.core.menu.AliienGUI;
 import com.aliiensmp.core.menu.ClickableItem;
-import com.aliiensmp.core.utils.DebugUtils;
 import com.aliiensmp.core.utils.MessageUtils;
 
 import org.bukkit.Material;
@@ -63,13 +62,6 @@ public class BlacklistAddGUI {
                                     .buildClickable(
                                             e -> {
                                                 if (cache.addBlacklistedItem(mat)) {
-                                                    DebugUtils.send(
-                                                            "Player %player% added %item% to the"
-                                                                    + " blacklist via GUI.",
-                                                            "%player%",
-                                                            player.getName(),
-                                                            "%item%",
-                                                            mat.name());
                                                     cache.playSuccess(player);
                                                     MessageUtils.send(
                                                             player,
