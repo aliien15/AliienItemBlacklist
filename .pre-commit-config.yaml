@@ -34,12 +34,12 @@ repos:
         types: [text]
         pass_filenames: true
 
-  # Java Code Formatter (Auto-fixes Java styling using Google Java Format)
+  # Java Code Formatter
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
     rev: v2.16.0
     hooks:
       - id: pretty-format-java
-        args: [--autofix]
+        args: [--autofix, --aosp]
 
   # Java Linter (Enforces coding standards)
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
